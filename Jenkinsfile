@@ -1,9 +1,15 @@
 pipeline {
   agent any
   stages {
-    stage('') {
+    stage('User test') {
       steps {
-        sh 'echo hello'
+        script {
+          def cred = {}
+          cred.add(DevApiUser())
+          sshagent(cred) {
+            sh 'ssh -o StrictHostKeyChecking=no -l root ${remote.host} uname -a'
+          }
+        }
       }
     }
 
