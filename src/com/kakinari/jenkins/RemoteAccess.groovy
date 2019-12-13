@@ -1,4 +1,4 @@
-package jp.co.telsys
+package com.kakinari.jenkins
 
 class RemoteAccess  implements Serializable {
     def RemoteUser info
