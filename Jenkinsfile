@@ -4,7 +4,8 @@ pipeline {
     stage('User test') {
       steps {
         script {
-          RemoteAccessDevApi().remsh(steps, "uname -a")
+          def result = RemoteAccessDevApi().remsh(steps, "uname -a")
+          print result
         }
       }
 
