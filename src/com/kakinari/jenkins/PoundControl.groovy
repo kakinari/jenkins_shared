@@ -5,33 +5,33 @@ class PoundControl extends RemoteAccess  implements Serializable {
     def PoundInfo info
     def String addOpts
     
-    PoundControl(info) {
-        super(info)
+    PoundControl(steps, info) {
+        super(steps, info)
         this.info = info
         this. addOpts = info.targetName ==~ /[0-9]*\.[0-9]*\.[0-9]*\.[0-9]*/ ? '' :  ' -H '
     }
 
-    def execute(steps, opts) {
-        return remsh(steps, String.format(commandBase, info.portNumber,  this.addOpts, opts))
+    def execute(opts) {
+        return remsh(String.format(commandBase, info.portNumber,  this.addOpts, opts))
     }
 
-    def executeStatus(steps, opts) {
-        return remshStatus(steps, String.format(commandBase, info.portNumber,  this.addOpts, opts))
+    def executeStatus(opts) {
+        return remshStatus(String.format(commandBase, info.portNumber,  this.addOpts, opts))
     }
 
     def boolean isActive(steps) {
-        return (executeStatus(steps, " | grep  ${info.targetName} | grep -q active") == 0)
+        return (executeStatus(" | grep  ${info.targetName} | grep -q active") == 0)
     }
 
     def boolean setActive(steps) {
-        execute(steps, "-B 0 0 ${info.backendID}");
+        execute("-B 0 0 ${info.backendID}");
     }
 
     def boolean setInactive(steps) {
-        execute(steps, "-b 0 0 ${info.backendID}");
+        execute("-b 0 0 ${info.backendID}");
     }
 
-    def waituntil(steps, flag, count = 10, interval = 1000) {
+    def waituntil(flag, count = 10, interval = 1000) {
         sleep(interval)
         while(flag != isActive(steps) && count != 0) {
             sleep(interval)
