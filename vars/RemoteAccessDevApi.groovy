@@ -1,5 +1,5 @@
-import jp.co.telsys.RemoteUser
-import jp.co.telsys.RemoteAccess
+import com.kakinari.jenkins.RemoteUser
+import com.kakinari.jenkins.RemoteAccess
 
 def call() {
     return new RemoteAccess(new RemoteUser (
