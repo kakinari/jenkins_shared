@@ -10,6 +10,7 @@ pipeline {
             sh 'ssh -o StrictHostKeyChecking=no -l root ${user.host} uname -a'
           }
         }
+
       }
     }
 
