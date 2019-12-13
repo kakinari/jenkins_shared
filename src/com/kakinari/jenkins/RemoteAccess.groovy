@@ -2,12 +2,14 @@ package com.kakinari.jenkins
 
 class RemoteAccess  implements Serializable {
     def RemoteUser info
+    def staps
 
-    RemoteAccess(info) {
+    RemoteAccess(steps, info) {
+        this.steps = steps
          this.info = info
     }
 
-    def String remsh(steps, String command) {
+    def String remsh(String command) {
         steps.sshagent([ info.credential ]) {
             return steps.sh(
                 script : "ssh ${info.username}@${info.hostname} ${command}",
@@ -15,7 +17,7 @@ class RemoteAccess  implements Serializable {
         }    
     }
 
-    def int remshStatus(steps, String command) {
+    def int remshStatus(String command) {
         steps.sshagent([ info.credential ]) {
             return steps.sh(
                 script : "ssh ${info.username}@${info.hostname} ${command}",
@@ -23,7 +25,7 @@ class RemoteAccess  implements Serializable {
         }    
     }
 
-    def boolean getFile(steps, String from, String to = '.', opts = '') {
+    def boolean getFile(String from, String to = '.', opts = '') {
         steps.sshagent([ info.credential ]) {
             return (steps.sh(
                 script : "scp ${opts} ${info.username}@${info.hostname}:${from} ${to}",
@@ -31,7 +33,7 @@ class RemoteAccess  implements Serializable {
         }    
     }
 
-    def boolean putFile(steps, String from, String to = '.', opts = '') {
+    def boolean putFile( String from, String to = '.', opts = '') {
         steps.sshagent([ info.credential ]) {
             return (steps.sh(
                 script : "scp ${opts} ${from} ${info.username}@${info.hostname}:${to}",
@@ -39,11 +41,11 @@ class RemoteAccess  implements Serializable {
         }    
     }
 
-    def boolean removeFile(steps, String name) {
+    def boolean removeFile(String name) {
         return (remshStatus(steps, "rm -f ${name}") == 0)
     }
 
-    def boolean isFileExist(steps, String name) {
+    def boolean isFileExist(String name) {
         return (remshStatus(steps, "ls ${name} >/dev/null 2>&1") == 0)
     }
 }
