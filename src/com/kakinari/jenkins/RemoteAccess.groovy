@@ -2,7 +2,7 @@ package com.kakinari.jenkins
 
 class RemoteAccess  implements Serializable {
     def RemoteUser info
-    def staps
+    def steps
 
     RemoteAccess(steps, info) {
         this.steps = steps
