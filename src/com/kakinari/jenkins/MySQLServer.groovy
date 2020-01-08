@@ -32,7 +32,7 @@ class MySQLServer implements Serializable {
     }
 
     def control() {
-        retstr = ""
+        def retstr = ""
         if (this.port != null)
             retstr += "-e ${this.port}:3306 "
         if (this.volume != null)
