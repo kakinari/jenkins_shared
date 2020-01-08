@@ -1,3 +1,5 @@
+import com.kakinari.jenkins.MySQLServer
+
 def mysql = null
 def getInstance(steps, info) {
     if (mysql == null)
