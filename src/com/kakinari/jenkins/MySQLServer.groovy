@@ -24,7 +24,7 @@ class MySQLServer implements Serializable {
 
     def stop() {
         steps.sh "docker stop ${name}"
-        steps.sh "docker rm -f ${name}"
+//        steps.sh "docker rm -f ${name}"
         steps.sh "docker image rm -f ${image}"
         if (volume != null)
             steps.sh "docker volume rm -f  ${volume}"
