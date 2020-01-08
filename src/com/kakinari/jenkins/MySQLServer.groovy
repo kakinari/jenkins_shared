@@ -33,10 +33,10 @@ class MySQLServer implements Serializable {
 
     def control() {
         retstr = ""
-        if (port != null)
-            retstr += "-e ${port}:3306 "
-        if (volume != null)
-            retstr += "-v ${volume}:/var/lib/mysql "
+        if (this.port != null)
+            retstr += "-e ${this.port}:3306 "
+        if (this.volume != null)
+            retstr += "-v ${this.volume}:/var/lib/mysql "
         return "--privileged -d --rm " + restr
     }
 
