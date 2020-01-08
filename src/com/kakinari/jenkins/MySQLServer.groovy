@@ -50,13 +50,19 @@ class MySQLServer implements Serializable {
 
     def execute(query) {
         def tmpfile = 'execquery.query'
-        def schema = 'commonDB'
         steps.writeFile(
             file: "${tmpfile}",
-//            text: "mysql <<EOF\n${query}\nEOF".replace("`", "\\`")
             text: "${query}"
         )
-//        steps.sh(script: "docker cp ${tmpfile} ${name}:/root/${tmpfile};docker exec ${name} sh /root/${tmpfile}; docker exec ${name} rm /root/${tmpfile}")
-        steps.sh(script: "cat ${tmpfile} | docker exec -i ${name} mysql ")
+        executeFile("${tmpfile}")
     }
+
+    def executeFile(filename) {
+        steps.sh(script: "cat ${filename} | docker exec -i ${name} mysql ")
+    }
+
+    def executeZipFile(filename) {
+        steps.sh(script: "zcat ${filename} | docker exec -i ${name} mysql ")
+    }
+
 }
