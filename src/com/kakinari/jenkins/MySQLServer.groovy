@@ -10,11 +10,11 @@ class MySQLServer implements Serializable {
 
     MySQLServer(steps, info) {
         this.steps = steps
-        this.port = info?.port ?: null
-        this.volume = info?.volume ?: null
-        this.name = info?.name ?: "sql_server"
-        this.image = info?.image ?: "kakinari/mysql-ja:Server-5.7"
-        this.password = info?.password ?: 'T3lsys.1181'
+        this.port = info?.get('port') ?: null
+        this.volume = info?.get('volume') ?: null
+        this.name = info?.get('name') ?: "sql_server"
+        this.image = info?.get('image') ?: "kakinari/mysql-ja:Server-5.7"
+        this.password = info?.get('password') ?: 'T3lsys.1181'
     }
 
     def start() {
