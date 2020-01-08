@@ -56,6 +56,6 @@ class MySQLServer implements Serializable {
             text: "mysql <<EOF\n${query}\nEOF".replace("`", "\\`")
         )
 //        steps.sh(script: "docker cp ${tmpfile} ${name}:/root/${tmpfile};docker exec ${name} sh /root/${tmpfile}; docker exec ${name} rm /root/${tmpfile}")
-        steps.sh(script: "cat ${tmpfile} | docker exec -i ${name} mysql ${schema}")
+        steps.sh(script: "cat ${tmpfile} | docker exec -i ${name} mysql ")
     }
 }
