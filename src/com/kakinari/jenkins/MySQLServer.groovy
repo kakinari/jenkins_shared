@@ -48,7 +48,7 @@ class MySQLServer implements Serializable {
         return this.volume
     }
 
-    def execute(query) {
+    def execute(String query) {
         def tmpfile = 'execquery.query'
         steps.writeFile(
             file: "${tmpfile}",
@@ -57,7 +57,7 @@ class MySQLServer implements Serializable {
         executeQuery("${tmpfile}")
     }
 
-    def executeQuery(filename) {
+    def executeQuery(String filename) {
         if (filename.endsWith('gz'))
             steps.sh(script: "zcat ${filename} | docker exec -i ${name} mysql ")
         else
