@@ -37,7 +37,7 @@ class MySQLServer implements Serializable {
             retstr += "-e ${this.port}:3306 "
         if (this.volume != null)
             retstr += "-v ${this.volume}:/var/lib/mysql "
-        return "--privileged -d --rm " + restr
+        return "--privileged -d --rm " + retstr
     }
 
     String getName() {
