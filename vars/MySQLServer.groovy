@@ -1,19 +1,19 @@
 import com.kakinari.jenkins.MySQLServerInfo
 
-def start(steps, MySQLServerInfo info) {
+def startServer(steps,  info) {
     steps.sh "docker run --name ${info.name} ${control(info)} ${info.image}"
     steps.sh "docker exec ${info.name} /root/setRootPassword ${info.password}"
 }   
 
-def stop(steps, MySQLServerInfo info) {
-    steps.sh "docker stop ${name}"
-    steps.sh "docker image rm -f ${image}"
-    if (volume != null)
-        steps.sh "docker volume rm -f  ${volume}"
+def stopServert(steps,  info) {
+    steps.sh "docker stop ${info.name}"
+    steps.sh "docker image rm -f ${info.image}"
+    if (info.volume != null)
+        steps.sh "docker volume rm -f  ${info.volume}"
     steps.sh "docker system prune -f"
 }
 
-def control(MySQLServerInfo info) {
+def control( info) {
     def retstr = ""
     if (info.port != null)
         retstr += "-e ${info.port}:3306 "
@@ -22,7 +22,7 @@ def control(MySQLServerInfo info) {
     return "--privileged -d --rm " + retstr
 }
 
-def execute(steps, MySQLServerInfo info, query) {
+def executeQuery(steps,  info, query) {
     steps.writeFile(
         file: "${info.tmpfile}",
         text: "mysql <<EOF\n${query}\nEOF".replace("`", "\\`")
