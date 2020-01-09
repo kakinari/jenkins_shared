@@ -49,12 +49,12 @@ class MySQLServer implements Serializable {
     }
 
     def execute(String query) {
-        def tmpfile = 'execquery.query'
+        String tmpfile = 'execquery.query'
         steps.writeFile(
-            file: "${tmpfile}",
-            text: "${query}"
+            file:  tmpfile,
+            text: query
         )
-        executeQuery("${tmpfile}")
+        executeQuery(tmpfile)
     }
 
     def executeQuery(String filename) {
