@@ -27,11 +27,14 @@ class MySQLServer implements Serializable {
 
     def stop() {
         steps.sh "docker stop ${name}"
-//        steps.sh "docker rm -f ${name}"
         steps.sh "docker image rm -f ${image}"
         if (volume != null)
             steps.sh "docker volume rm -f  ${volume}"
         steps.sh "docker system prune -f"
+    }
+
+    def Dump(file, schema) {
+        steps.sh(script: "docker exec ${name} mysqldump --quick --single-transaction ${schema} | gzip > ${file}")
     }
 
     def control() {
@@ -64,17 +67,18 @@ class MySQLServer implements Serializable {
         new File(filename).delete()
     }
 
-    def execute(String query) {
+    def execute(String query, schema = null) {
         String tmpfile = '/var/tmp/execquery.query'
         storeFile(tmpfile, query)
-        executeQuery(tmpfile)
+        executeQuery(tmpfile, schema)
         deleteFile(tmpfile)
     }
 
-    def executeQuery(String filename) {
+    def executeQuery(String filename, schema = null) {
+        String database = schema?: ""
         if (filename.endsWith('gz'))
-            steps.sh(script: "zcat ${filename} | docker exec -i ${name} mysql commonDB")
+            steps.sh(script: "zcat ${filename} | docker exec -i ${name} mysql ${database}")
         else
-            steps.sh(script: "cat ${filename} | docker exec -i ${name} mysql ")
+            steps.sh(script: "cat ${filename} | docker exec -i ${name} mysql ${database}")
     }
 }
