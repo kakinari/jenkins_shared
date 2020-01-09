@@ -49,8 +49,7 @@ class MySQL implements Serializable {
     }
 
     def getTemplate(file) {
-        def content = libraryResource "${template}/${file}"
-        return content
+        return steps.libraryResource "${template}/${file}"
     }
 
     def execute(String query) {
