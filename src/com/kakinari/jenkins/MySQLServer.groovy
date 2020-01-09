@@ -72,15 +72,14 @@ class MySQLServer implements Serializable {
     def execute(String query) {
         String tmpfile = '/var/tmp/execquery.query'
         storeFile(tmpfile, query)
-        executeQuery(tmpfile, schema)
+        executeQuery(tmpfile)
         deleteFile(tmpfile)
     }
 
     def executeQuery(String filename) {
-        String database = schema?: ""
         if (filename.endsWith('gz'))
-            steps.sh(script: "zcat ${filename} | docker exec -i ${name} mysql ${database}")
+            steps.sh(script: "zcat ${filename} | docker exec -i ${name} mysql ${schema}")
         else
-            steps.sh(script: "cat ${filename} | docker exec -i ${name} mysql ${database}")
+            steps.sh(script: "cat ${filename} | docker exec -i ${name} mysql ${schema}")
     }
 }
