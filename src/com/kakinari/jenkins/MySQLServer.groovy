@@ -52,7 +52,7 @@ class MySQLServer implements Serializable {
 
     def storeFile(filename, query) {
         new File(filename).withWriter('utf-8') { writer ->
-            query.split("\n")).each {
+            query.split("\n").each {
                 writer.writeLine it
             }
         }
