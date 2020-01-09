@@ -33,7 +33,7 @@ class MySQLServer implements Serializable {
         steps.sh "docker system prune -f"
     }
 
-    def Dump(file, schema) {
+    def Dump(String file, String schema) {
         steps.sh(script: "docker exec ${name} mysqldump --quick --single-transaction ${schema} | gzip > ${file}")
     }
 
