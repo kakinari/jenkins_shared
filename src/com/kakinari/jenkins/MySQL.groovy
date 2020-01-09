@@ -21,7 +21,7 @@ class MySQL implements Serializable {
         def command = ""
         if (container != null)
             command += "docker exec -i ${container} "
-        command += '${cmd} '
+        command += "${cmd} "
         if (hostname != null)
             command += "--host=${hostname} "
         if (username != null)
