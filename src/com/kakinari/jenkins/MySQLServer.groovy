@@ -1,6 +1,7 @@
 package com.kakinari.jenkins
 
 import java.io.File
+import java.io.BufferedWriter
 
 class MySQLServer implements Serializable {
     def steps
@@ -52,7 +53,7 @@ class MySQLServer implements Serializable {
 
     @NonCPS
     def storeFile(filename, query) {
-        new File(filename).withWriter('utf-8') { writer ->
+        new File(filename).withWriter('utf-8') { BufferedWriter writer ->
             query.split("\n").each {
                 writer.writeLine it
             }
