@@ -65,7 +65,7 @@ class MySQLServer implements Serializable {
     }
 
     def execute(String query) {
-        String tmpfile = 'execquery.query'
+        String tmpfile = '/var/tmp/execquery.query'
         storeFile(tmpfile, query)
         executeQuery(tmpfile)
         deleteFile(tmpfile)
