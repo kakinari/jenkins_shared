@@ -1,6 +1,6 @@
 package com.kakinari.jenkins
 
-class MySQL implements Serialize {
+class MySQL implements Serializable {
     def steps
     def container
     def hostname
