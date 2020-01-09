@@ -50,6 +50,7 @@ class MySQLServer implements Serializable {
         return this.volume
     }
 
+    @NonCPS
     def storeFile(filename, query) {
         new File(filename).withWriter('utf-8') { writer ->
             query.split("\n").each {
