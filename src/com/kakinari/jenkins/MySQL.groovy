@@ -7,6 +7,7 @@ class MySQL implements Serializable {
     def username
     def password
     def schema
+    def template
 
     MySQL(steps, info) {
         this.steps = steps
@@ -15,6 +16,7 @@ class MySQL implements Serializable {
         this.username = info?.get('username') ?: null
         this.password = info?.get('password') ?: null
         this.schema    = info?.get('schema') ?: null
+        this.template    = info?.get('template') ?: "com/kakinari/jenkins/queries"
     }
 
     def commandLine(cmd = "mysql") {
@@ -33,5 +35,35 @@ class MySQL implements Serializable {
         return command
     }
 
+    @NonCPS
+    def storeFile(filename, query) {
+        new File(filename).withWriter('utf-8') { BufferedWriter writer ->
+            query.split("\n").each {
+                writer.writeLine it
+            }
+        }
+    }
+
+    def deleteFile(filename) {
+        new File(filename).delete()
+    }
+
+    def getTemplate(String file) {
+        return libraryResource "${template}/${file}"
+    }
+
+    def execute(String query) {
+        String tmpfile = '/var/tmp/execquery.query'
+        storeFile(tmpfile, query)
+        executeQuery(tmpfile)
+        deleteFile(tmpfile)
+    }
+
+    def executeQuery(String filename) {
+        if (filename.endsWith('gz'))
+            steps.sh(script: "zcat ${filename} | ${commandLine()}")
+        else
+            steps.sh(script: "cat ${filename} |  ${commandLine()}")
+    }
 
 }
