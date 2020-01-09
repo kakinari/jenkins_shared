@@ -84,7 +84,10 @@ class MySQLServer implements Serializable {
     }
 
     def executeQuery(String filename) {
-        executeQueryWithSchema(filename, "")
+        if (filename.endsWith('gz'))
+            steps.sh(script: "zcat ${filename} | docker exec -i ${name} mysql")
+        else
+            steps.sh(script: "cat ${filename} | docker exec -i ${name} mysql")
     }
 
     def executeQueryWithSchema(String filename) {
