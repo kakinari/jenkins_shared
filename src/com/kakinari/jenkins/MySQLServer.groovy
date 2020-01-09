@@ -1,5 +1,7 @@
 package com.kakinari.jenkins
 
+import java.io.File
+
 class MySQLServer implements Serializable {
     def steps
     def volume
@@ -48,13 +50,23 @@ class MySQLServer implements Serializable {
         return this.volume
     }
 
+    def storeFile(filename, query) {
+        new File(filename).withWriter('utf-8') { writer ->
+            query.split("\n")).each {
+                writer.writeLine it
+            }
+        }
+    }
+
+    def deleteFile(filename) {
+        new File(filename).delete()
+    }
+
     def execute(String query) {
         String tmpfile = 'execquery.query'
-        steps.writeFile(
-            file:  tmpfile,
-            text: query
-        )
+        storeFile(tmpfile, query)
         executeQuery(tmpfile)
+        deleteFile(tmpfile)
     }
 
     def executeQuery(String filename) {
