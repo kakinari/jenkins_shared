@@ -10,6 +10,7 @@ class MySQLServer implements Serializable {
     def name
     def image
     def password
+    def schema
 
     MySQLServer(steps, info) {
         this.steps = steps
@@ -18,6 +19,7 @@ class MySQLServer implements Serializable {
         this.name = info?.get('name') ?: "sql_server"
         this.image = info?.get('image') ?: "kakinari/mysql-ja:Server-5.7"
         this.password = info?.get('password') ?: 'T3lsys.1181'
+        this.schema = info?.get('schema') ?: ""
     }
 
     def start() {
@@ -33,7 +35,7 @@ class MySQLServer implements Serializable {
         steps.sh "docker system prune -f"
     }
 
-    def Dump(String file, String schema) {
+    def Dump(String file) {
         steps.sh(script: "docker exec ${name} mysqldump --quick --single-transaction ${schema} | gzip > ${file}")
     }
 
@@ -67,14 +69,14 @@ class MySQLServer implements Serializable {
         new File(filename).delete()
     }
 
-    def execute(String query, schema = null) {
+    def execute(String query) {
         String tmpfile = '/var/tmp/execquery.query'
         storeFile(tmpfile, query)
         executeQuery(tmpfile, schema)
         deleteFile(tmpfile)
     }
 
-    def executeQuery(String filename, schema = null) {
+    def executeQuery(String filename) {
         String database = schema?: ""
         if (filename.endsWith('gz'))
             steps.sh(script: "zcat ${filename} | docker exec -i ${name} mysql ${database}")
