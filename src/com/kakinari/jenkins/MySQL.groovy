@@ -48,7 +48,7 @@ class MySQL implements Serializable {
         new File(filename).delete()
     }
 
-    def getTemplate(String file) {
+    def getTemplate(file) {
         return libraryResource "${template}/${file}"
     }
 
