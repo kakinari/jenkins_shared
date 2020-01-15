@@ -55,18 +55,19 @@ class MySQL implements Serializable {
     def execute(String query) {
         String tmpfile = '/var/tmp/execquery.query'
         storeFile(tmpfile, query)
-        executeQuery(tmpfile)
+        def result = executeQuery(tmpfile)
         deleteFile(tmpfile)
+        return result
     }
 
     def executeQuery(String filename) {
         if (filename.endsWith('gz'))
-            steps.sh(script: "zcat ${filename} | ${commandLine()}")
+            return steps.sh(script: "zcat ${filename} | ${commandLine()}", returnStdout: true)
         else
-            steps.sh(script: "cat ${filename} |  ${commandLine()}")
+            return steps.sh(script: "cat ${filename} |  ${commandLine()}", returnStdout: true)
     }
 
-	def getquery(String filename, String colname = null, String data = null, String extra = null, String ordercond = null, String groupcond = null) {
+	def getQuery(String filename, String colname = null, String data = null, String extra = null, String ordercond = null, String groupcond = null) {
         if (filename == null)
             return ""
         return "${getTemplate(filename)}${getCondition(colname, data, extra, ordercond, groupcond)}"
