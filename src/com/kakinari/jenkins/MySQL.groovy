@@ -49,7 +49,7 @@ class MySQL implements Serializable {
     }
 
     def getTemplate(file, Map param = new HashMap()) {
-        String contnt = steps.libraryResource("${template}/${file}")
+        String content = steps.libraryResource("${template}/${file}")
         param?.each { key, val ->
             content = content.replace(key, val)
         }
