@@ -52,19 +52,18 @@ class MySQL implements Serializable {
         return steps.libraryResource("${template}/${file}")
     }
 
-    def execute(String query, String outfile = null) {
+    def execute(String query, String outfile = null, boolean nullFlag = false) {
         String tmpfile = '/var/tmp/execquery.query'
         storeFile(tmpfile, query)
-        if (outfile == null) {
-            def result = executeQuery(tmpfile)
-            deleteFile(tmpfile)
-            return result
-        } else {
-            String name = outfile.startsWith('/') ? outfile :  "${steps.sh(script: 'echo -n $PWD', returnStdout: true)}/${outfile}"
-            storeFile(name, executeQuery(tmpfile))
-            deleteFile(tmpfile)
-            return name
-        }
+        String result
+        result = executeQuery(tmpfile)
+        if (nullFlag) result = result?.replace("NULL", "\\N")
+        if (outfile?.startsWith('/'))
+            outfile = "${steps.sh(script: 'echo -n $PWD', returnStdout: true)}/${outfile}"
+        deleteFile(tmpfile)
+        if (outfile != null)
+            storeFile(outfile, executeQuery(tmpfile))
+        return outfile?: result
     }
 
     def executeQuery(String filename) {
