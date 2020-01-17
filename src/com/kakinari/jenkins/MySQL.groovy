@@ -53,6 +53,7 @@ class MySQL implements Serializable {
         param?.each { key, val ->
             content = content.replace(key, val)
         }
+        return content
     }
 
     def execute(String query, String outfile = null, boolean nullFlag = false) {
