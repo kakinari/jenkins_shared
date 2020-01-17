@@ -52,12 +52,18 @@ class MySQL implements Serializable {
         return steps.libraryResource("${template}/${file}")
     }
 
-    def execute(String query) {
+    def execute(String query, String outfile = null) {
         String tmpfile = '/var/tmp/execquery.query'
         storeFile(tmpfile, query)
-        def result = executeQuery(tmpfile)
-        deleteFile(tmpfile)
-        return result
+        if (outfile == null) {
+            def result = executeQuery(tmpfile)
+            deleteFile(tmpfile)
+            return result
+        } else {
+            storeFile(outfile, executeQuery(tmpfile))
+            deleteFile(tmpfile)
+            return outfile
+        }
     }
 
     def executeQuery(String filename) {
