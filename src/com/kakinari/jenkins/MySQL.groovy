@@ -58,7 +58,7 @@ class MySQL implements Serializable {
         String result
         result = executeQuery(tmpfile)
         if (result != null && nullFlag) result = result.replace("NULL", "\\N")
-        if (outfile != null && outfile.startsWith('/'))
+        if (outfile != null && !outfile.startsWith('/'))
             outfile = "${steps.sh(script: 'echo -n $PWD', returnStdout: true)}/${outfile}"
         deleteFile(tmpfile)
         if (outfile != null)
