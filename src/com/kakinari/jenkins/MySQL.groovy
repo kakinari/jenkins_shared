@@ -60,12 +60,12 @@ class MySQL implements Serializable {
             deleteFile(tmpfile)
             return result
         } else {
-            storeFile(outfile.startsWith('/') ? 
+            String name = outfile.startsWith('/') ? 
                     outfile :  
                     "${steps.sh(script: 'echo -n $PWD', returnStdout: true)}/${outfile}",
-                 executeQuery(tmpfile))
+            storeFile(name, executeQuery(tmpfile))
             deleteFile(tmpfile)
-            return outfile
+            return name
         }
     }
 
