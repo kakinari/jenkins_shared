@@ -48,7 +48,7 @@ class MySQL implements Serializable {
         new File(filename).delete()
     }
 
-    def getTemplate(file, Map param = {}) {
+    def getTemplate(file, Map param = ()) {
         String contnt = steps.libraryResource("${template}/${file}")
         param?.each { key, val ->
             content = content.replace(key, val)
@@ -77,8 +77,7 @@ class MySQL implements Serializable {
     }
 
 	def getQuery(String filename, String colname = null, String data = null, String extra = null, String ordercond = null, String groupcond = null) {
-        Map empty = {}
-        return getQuery(filename, empty, colname, data, extra, ordercond, groupcond)
+        return getQuery(filename, (Map) (), colname, data, extra, ordercond, groupcond)
     }
 
     def getQuery(String filename, Map param, String colname = null, String data = null, String extra = null, String ordercond = null, String groupcond = null) {
