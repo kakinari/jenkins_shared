@@ -77,9 +77,9 @@ class MySQL implements Serializable {
     }
 
 	def getQuery(String filename, String colname = null, String data = null, String extra = null, String ordercond = null, String groupcond = null) {
-        return getQuery(filename, null, colname, data, extra, ordercond, groupcond)
+        return getQuery(filename, {}, colname, data, extra, ordercond, groupcond)
     }
-    
+
     def getQuery(String filename, Map param, String colname = null, String data = null, String extra = null, String ordercond = null, String groupcond = null) {
         if (filename == null)
             return ""
