@@ -60,9 +60,7 @@ class MySQL implements Serializable {
             deleteFile(tmpfile)
             return result
         } else {
-            String name = outfile.startsWith('/') ? 
-                    outfile :  
-                    "${steps.sh(script: 'echo -n $PWD', returnStdout: true)}/${outfile}",
+            String name = outfile.startsWith('/') ? outfile :  "${steps.sh(script: 'echo -n $PWD', returnStdout: true)}/${outfile}"
             storeFile(name, executeQuery(tmpfile))
             deleteFile(tmpfile)
             return name
