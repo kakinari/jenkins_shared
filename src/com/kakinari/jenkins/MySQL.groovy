@@ -48,8 +48,11 @@ class MySQL implements Serializable {
         new File(filename).delete()
     }
 
-    def getTemplate(file) {
-        return steps.libraryResource("${template}/${file}")
+    def getTemplate(file, Map param = {}) {
+        String contnt = steps.libraryResource("${template}/${file}")
+        param?.each { key, val ->
+            content = content.replace(key, val)
+        }
     }
 
     def execute(String query, String outfile = null, boolean nullFlag = false) {
@@ -74,9 +77,13 @@ class MySQL implements Serializable {
     }
 
 	def getQuery(String filename, String colname = null, String data = null, String extra = null, String ordercond = null, String groupcond = null) {
+        return getQuery(filename, null, colname, data, extra, ordercond, groupcond)
+    }
+    
+    def getQuery(String filename, Map param, String colname = null, String data = null, String extra = null, String ordercond = null, String groupcond = null) {
         if (filename == null)
             return ""
-        return "${getTemplate(filename)}${getCondition(colname, data, extra, ordercond, groupcond)}"
+        return "${getTemplate(filename, param)}${getCondition(colname, data, extra, ordercond, groupcond)}"
     }
 
 	def getCondition(String colname, String data, String extra = null, String ordercond = null, String groupcond = null) {
