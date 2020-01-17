@@ -62,7 +62,7 @@ class MySQL implements Serializable {
         } else {
             storeFile(outfile.startsWith('/') ? 
                     outfile :  
-                    "${WORKSPACE}/${outfile}",
+                    "${steps.WORKSPACE}/${outfile}",
                  executeQuery(tmpfile))
             deleteFile(tmpfile)
             return outfile
