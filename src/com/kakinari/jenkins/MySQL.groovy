@@ -74,9 +74,9 @@ class MySQL implements Serializable {
 
     def dumpDatabase(String filename) {
         if (filename.endsWith('gz'))
-            return steps.sh(script: "${commandLine('mysqldump', '--quick  --single-transaction') | gzip > ${filename}}", returnStatus: true)
+            return steps.sh(script: "${commandLine('mysqldump', '--quick  --single-transaction')} | gzip > ${filename}", returnStatus: true)
         else
-            return steps.sh(script: "${commandLine('mysqldump', '--quick  --single-transaction') > ${filename}}", returnStatus: true)
+            return steps.sh(script: "${commandLine('mysqldump', '--quick  --single-transaction')} > ${filename}", returnStatus: true)
     }
 
     def executeQuery(String filename) {
