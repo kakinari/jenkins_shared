@@ -19,7 +19,7 @@ class MySQL implements Serializable {
         this.template  = info?.get('template') ?: "com/kakinari/jenkins/queries"
     }
 
-    def commandLine(cmd = "mysql") {
+    def commandLine(cmd = "mysql", extraopt = null) {
         def command = ""
         if (container != null)
             command += "docker exec -i ${container} "
@@ -30,6 +30,8 @@ class MySQL implements Serializable {
             command += "--user=${username} "
         if (password != null)
             command += "--password=${password} "
+        if (extraopt != null)
+            command += "${extraopt} "
         if (schema != null)
             command += "${schema} "
         return command
@@ -68,6 +70,13 @@ class MySQL implements Serializable {
         if (outfile != null)
             storeFile(outfile, result)
         return outfile?: result
+    }
+
+    def dumpDatabase(String filename) {
+        if (filename.endsWith('gz'))
+            return steps.sh(script: "${commandLine('mysqldump', '--quick  --single-transaction') | gzip > ${filename}}", returnStatus: true)
+        else
+            return steps.sh(script: "${commandLine('mysqldump', '--quick  --single-transaction') > ${filename}}", returnStatus: true)
     }
 
     def executeQuery(String filename) {
